@@ -5,7 +5,11 @@ const charactersWindow = document.getElementById('character-list');
 
 let actualPage = 1;
 let maxPages = 0;
+
+
 prevPageButton.style.backgroundColor = 'red';
+prevPageButton.textContent = `First Page`
+nextPageButton.textContent = `Next Page #${actualPage + 1}`;
 
 // Function to get the vales from the appi.
 function getChars(){
@@ -36,7 +40,13 @@ prevPageButton.addEventListener('click', () => {
 
         if (actualPage <= 1) {
             prevPageButton.style.backgroundColor = 'red';
+            prevPageButton.textContent = `First Page`;
+            prevPageButton.style.border = '2px solid transparent';
+        } else {        
+            prevPageButton.textContent = `Prev Page #${actualPage - 1}`;
         }
+
+        nextPageButton.textContent = `Next Page #${actualPage + 1}`;
     } 
 });
 
@@ -46,10 +56,16 @@ nextPageButton.addEventListener('click', () => {
         actualPage++;
         getChars();
         prevPageButton.style.backgroundColor = '#03b1c8';
-        
+
         if(actualPage >= maxPages) {
             nextPageButton.style.backgroundColor = 'red';
+            nextPageButton.textContent = `Last Page`;
+            nextPageButton.style.border = '2px solid transparent';
+        } else {        
+            nextPageButton.textContent = `Next Page #${actualPage + 1}`;
         }
+     
+        prevPageButton.textContent = `Prev Page #${actualPage - 1}`;
     } 
 });
 
@@ -65,7 +81,7 @@ showChars = (data) => {
     data.results.forEach(element => {
         charactersWindow.insertAdjacentHTML('beforeend',
         `<li class="character-entry">
-            <img src="${element.image}" alt="${element.name} character image"/>
+            <img class="character-image" src="${element.image}" alt="${element.name} character image"/>
             <p><span>Name:</span> ${element.name}</p>
             <p><span>Species:</span> ${element.species}</p>
         </li>
@@ -73,4 +89,30 @@ showChars = (data) => {
     });
 };
 
+// Functions to get a hover effect only when a button can be interacted.
+nextPageButton.addEventListener('mouseover', () => {
+    if(actualPage < maxPages) {
+        nextPageButton.style.border = '2px solid whitesmoke';
+    }
+});
+
+nextPageButton.addEventListener('mouseout', () => {
+    if(actualPage < maxPages) {
+        nextPageButton.style.border = '2px solid transparent';
+    }
+});
+
+prevPageButton.addEventListener('mouseover', () => {
+    if(actualPage > 1) {
+        prevPageButton.style.border = '2px solid whitesmoke';
+    }
+})
+
+prevPageButton.addEventListener('mouseout', () => {
+    if(actualPage > 1) {
+        prevPageButton.style.border = '2px solid transparent';
+    }
+});
+
+// First call to main function.
 getChars();
